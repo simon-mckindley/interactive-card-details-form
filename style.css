@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+html {
+    font-family: "Space Grotesk";
+    font-size: 18px;
+    font-weight: 500;
+
+    --white: hsl(0, 0%, 100%);
+    --light-grayish-violet: hsl(270, 3%, 87%);
+    --dark-grayish-violet: hsl(279, 6%, 55%);
+    --very-dark-violet: hsl(278, 68%, 11%);
+    --input-error: hsl(0, 100%, 66%);
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin: 0;
+    min-height: 100vh;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button {
+    font: inherit;
+}
+
+.card-section {
+    position: relative;
+    background-image: url(images/bg-main-desktop.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-wrapper {
+    position: absolute;
+    top: 50%;
+    translate: 8vw -50%;
+}
+
+.card {
+    position: relative;
+    width: max-content;
+    font-size: 0.7em;
+    color: var(--white);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.card-data {
+    position: absolute;
+    z-index: 10;
+}
+
+.card-front {
+    /* top: 15%; */
+    /* left: 8vw; */
+}
+
+.front-data {
+    inset: 1.5rem;
+    display: grid;
+    grid-template: 1fr 1fr 0.5fr / 2fr 1fr;
+    align-items: end;
+}
+
+.front-data img {
+    align-self: start;
+}
+
+.card-number {
+    grid-area: 2 / 1 / auto / span 2;
+    font-size: 2.3em;
+}
+
+.card-name {
+    grid-area: 3 / 1 / auto / auto;
+}
+
+.card-exp {
+    grid-area: 3 / 2 / auto / auto;
+    justify-self: end;
+}
+
+.card-back {
+    margin-top: 2rem;
+    left: 20%;
+}
+
+.back-data {
+    top: 46%;
+    left: 80%;
+}
+
+
+.form-section {
+    display: grid;
+    place-content: center;
+}
