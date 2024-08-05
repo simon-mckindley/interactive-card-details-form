@@ -14,34 +14,40 @@ const inputList = [nameInput, numInput, expMonthInput, expYearInput, cvcInput];
 
 let cardNumLength = 0;
 
-function validateName() {
-    const regex = /^[A-Za-z\s]+$/;
-    let value = nameInput.value;
-    if (!regex.test(value) || value.length > 30) {
-        nameInput.value = value = value.slice(0, value.length - 1);
+
+function validateName(index) {
+    let value = inputList[index].value;
+    if (!testName(value) || value.length > 30) {
+        inputList[index].value = value = value.slice(0, value.length - 1);
     }
 
-    if (nameInput.value.length === 0) {
+    if (inputList[index].value.length === 0) {
         value = "Jane Appleseed";
     }
 
     return value;
 }
 
-function validateCardNumber() {
-    let value = numInput.value;
-    if (!validateNumber(value) || value.length > 19) {
-        numInput.value = value = value.slice(0, value.length - 1);
+function validateCardNumber(index) {
+    let value = inputList[index].value;
+    if (!testNumber(value.slice(-1)) || value.length > 19) {
+        inputList[index].value = value = value.slice(0, value.length - 1);
     }
 
-    if (numInput.value.length === 0) {
+    if (inputList[index].value.length === 0) {
         value = "0000 0000 0000 0000";
-    } else if (value.length > cardNumLength &&
-        (value.length === 4 || value.length === 9 || value.length === 14)) {
-        numInput.value = value = `${value} `;
-    }
+    } else {
+        newValue = inputList[index].value.replace(/\s/g, "");
+        value = "";
 
-    cardNumLength = value.length;
+        for (let i = 0; i < newValue.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                value += " ";
+            }
+            value += newValue[i];
+        }
+        inputList[index].value = value;
+    }
 
     return value;
 }
@@ -49,7 +55,7 @@ function validateCardNumber() {
 function validateExpCvc(index) {
     let value = inputList[index].value;
     const maxLength = (index === 4) ? 3 : 2;
-    if (!validateNumber(value) || value.length > maxLength) {
+    if (!testNumber(value) || value.length > maxLength) {
         inputList[index].value = value = value.slice(0, value.length - 1);
     }
 
@@ -60,25 +66,35 @@ function validateExpCvc(index) {
     return value;
 }
 
-function validateNumber(value) {
-    const regex = /^[0-9\s]+$/;
+function testName(value) {
+    const regex = /^[A-Za-z\s]+$/;
+    return regex.test(value);
+}
+
+function testNumber(value) {
+    const regex = /^[0-9]+$/;
     return regex.test(value);
 }
 
 
 for (let i = 0; i < inputList.length; i++) {
-    inputList[i].addEventListener("keyup", (event) => {
+    inputList[i].addEventListener("input", (event) => {
+        inputList.forEach((input) => {
+            input.closest(".input-wrapper").classList.remove("has-error");
+        });
+
         let value = event.target.value;
         switch (event.target.id) {
             case "name":
-                value = validateName();
+                value = validateName(i);
                 break;
             case "number":
-                value = validateCardNumber();
+                value = validateCardNumber(i);
                 break;
 
             default:
                 value = validateExpCvc(i);
+                break;
         }
 
         outputList[i].textContent = value;
@@ -87,5 +103,68 @@ for (let i = 0; i < inputList.length; i++) {
 
 
 document.getElementById("submit-btn").addEventListener("click", () => {
+    let hasError = false;
+    inputList.forEach((input) => {
+        const parent = input.closest(".input-wrapper");
+        const errorField = parent.querySelector(".error");
+        errorField.textContent = "";
+        if (input.value.length === 0) {
+            errorField.textContent = "Can't be blank";
+        } else {
 
+            switch (input.id) {
+                case "name":
+                    if (!testName(input.value)) {
+                        errorField.textContent = "Wrong format, letters only";
+                    } else if (input.value.length > 30) {
+                        errorField.textContent = "Too long";
+                    } else if (input.value.replace(/\s/g, "").length < 3) {
+                        errorField.textContent = "Too short";
+                    }
+                    break;
+                case "number":
+                    if (!testNumber(input.value.replace(/\s/g, ""))) {
+                        errorField.textContent = "Wrong format, numbers only";
+                    } else if (input.value.replace(/\s/g, "").length != 16) {
+                        errorField.textContent = "Must be 16 numbers";
+                    }
+                    break;
+                case "exp-month":
+                    if (!testNumber(input.value)) {
+                        errorField.textContent = "Numbers only";
+                    } else if (input.value.replace(/\s/g, "").length != 2) {
+                        errorField.textContent = "Must be 2 numbers";
+                    } else if (input.value < 1 || input.value > 12) {
+                        errorField.textContent = "Invalid month";
+                    }
+                    break;
+                case "exp-year":
+                    if (!testNumber(input.value)) {
+                        errorField.textContent = "Numbers only";
+                    } else if (input.value.replace(/\s/g, "").length != 2) {
+                        errorField.textContent = "Must be 2 numbers";
+                    } else if (input.value < 24) {
+                        errorField.textContent = "Invalid year";
+                    }
+                    break;
+                case "cvc":
+                    if (!testNumber(input.value)) {
+                        errorField.textContent = "Numbers only";
+                    } else if (input.value.replace(/\s/g, "").length != 3) {
+                        errorField.textContent = "Must be 3 numbers";
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        if (errorField.textContent != "") {
+            parent.classList.add("has-error");
+            hasError = true;
+        }
+    });
+
+    console.log("CORRECT");
 });
