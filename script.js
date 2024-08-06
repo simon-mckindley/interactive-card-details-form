@@ -12,6 +12,9 @@ const expYearInput = document.getElementById("exp-year");
 const cvcInput = document.getElementById("cvc");
 const inputList = [nameInput, numInput, expMonthInput, expYearInput, cvcInput];
 
+const form = document.querySelector("form");
+const complete = document.querySelector(".complete-wrapper");
+
 let cardNumLength = 0;
 
 
@@ -76,11 +79,21 @@ function testNumber(value) {
     return regex.test(value);
 }
 
+function switchView(isComplete) {
+    if (isComplete) {
+        form.style.display = "none";
+        complete.style.display = "grid";
+    } else {
+        form.style.display = "";
+        complete.style.display = "";
+    }
+}
+
 
 for (let i = 0; i < inputList.length; i++) {
     inputList[i].addEventListener("input", (event) => {
         inputList.forEach((input) => {
-            input.closest(".input-wrapper").classList.remove("has-error");
+            input.classList.remove("has-error");
         });
 
         let value = event.target.value;
@@ -104,9 +117,9 @@ for (let i = 0; i < inputList.length; i++) {
 
 document.getElementById("submit-btn").addEventListener("click", () => {
     let hasError = false;
+
     inputList.forEach((input) => {
-        const parent = input.closest(".input-wrapper");
-        const errorField = parent.querySelector(".error");
+        const errorField = input.nextElementSibling;
         errorField.textContent = "";
         if (input.value.length === 0) {
             errorField.textContent = "Can't be blank";
@@ -143,7 +156,7 @@ document.getElementById("submit-btn").addEventListener("click", () => {
                         errorField.textContent = "Numbers only";
                     } else if (input.value.replace(/\s/g, "").length != 2) {
                         errorField.textContent = "Must be 2 numbers";
-                    } else if (input.value < 24) {
+                    } else if (input.value < 24 || input.value > 34) {
                         errorField.textContent = "Invalid year";
                     }
                     break;
@@ -161,10 +174,30 @@ document.getElementById("submit-btn").addEventListener("click", () => {
         }
 
         if (errorField.textContent != "") {
-            parent.classList.add("has-error");
+            input.classList.add("has-error");
             hasError = true;
         }
     });
 
-    console.log("CORRECT");
+    if (hasError) {
+        console.log("ERROR");
+    } else {
+        console.log("CORRECT");
+        switchView(true);
+    }
+});
+
+
+document.getElementById("continue-btn").addEventListener("click", () => {
+    cardName.textContent = "Jane Appleseed";
+    cardNum.textContent = "0000 0000 0000 0000";
+    cardExpMonth.textContent = "00";
+    cardExpYear.textContent = "00";
+    cardCvc.textContent = "000";
+
+    inputList.forEach((input) => {
+        input.value = "";
+    })
+
+    switchView(false);
 });

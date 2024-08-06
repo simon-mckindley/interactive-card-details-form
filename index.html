@@ -67,9 +67,10 @@
           <label for="exp-month">Exp. Date (MM/YY)</label>
           <div class="exp-input-wrapper">
             <input type="text" id="exp-month" placeholder="MM" maxlength="2">
+            <span class="error exp-error"></span>
             <input type="text" id="exp-year" placeholder="YY" maxlength="2">
+            <span class="error exp-error"></span>
           </div>
-          <span class="error"></span>
         </div>
 
         <div class="input-wrapper">
@@ -82,12 +83,15 @@
       <button type="button" id="submit-btn">Confirm</button>
 
     </form>
-  </section>
-  <!-- Completed state start -->
 
-  <!-- Thank you!
-  We've added your card details
-  Continue -->
+
+    <div class="complete-wrapper">
+      <img src="images/icon-complete.svg" alt="">
+      <div class="complete-title">Thank you!</div>
+      <div class="complete-text">We've added your card details</div>
+      <button type="button" id="continue-btn">Continue</button>
+    </div>
+  </section>
 
 </body>
 
