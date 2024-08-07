@@ -15,8 +15,10 @@ html {
 body {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    margin: 0;
+    margin: 0 auto;
     min-height: 100vh;
+    max-width: 1800px;
+
 }
 
 img {
@@ -39,6 +41,7 @@ button {
 .card-wrapper {
     position: absolute;
     top: 50%;
+    max-width: 90vw;
     translate: 8vw -50%;
 }
 
@@ -102,6 +105,7 @@ form {
     flex-direction: column;
     gap: 1.5rem;
     width: 30ch;
+    max-width: 85vw;
 }
 
 .input-wrapper {
@@ -190,6 +194,7 @@ input.has-error {
     grid-template-columns: auto;
     justify-items: center;
     width: 30ch;
+    max-width: 85vw;
     opacity: 0;
     translate: 0 50%;
     animation: move-up 500ms ease forwards;
@@ -214,4 +219,54 @@ input.has-error {
 .complete-text {
     font-size: 0.8em;
     margin-block-end: 2.2em;
+}
+
+@media screen and (max-width: 1250px) {
+    .form-section {
+        padding-left: 18rem;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    body {
+        grid-template-columns: auto;
+        grid-template-rows: 1.5fr 3fr;
+    }
+
+    .form-section {
+        padding-left: 0;
+    }
+
+    .card-wrapper {
+        inset: 5%;
+        translate: unset;
+    }
+
+    .card {
+        font-size: 0.5em;
+        width: 80%;
+        max-width: 447px;
+    }
+
+    .card-front {
+        position: absolute;
+        top: 55%;
+        z-index: 1;
+    }
+
+    .card-data {
+        max-width: 100%;
+    }
+
+    .front-data {
+        inset: 1.2em;
+    }
+
+    .front-data img {
+        width: 7em;
+    }
+
+    .card-number {
+        font-size: 1.8em;
+    }
 }
